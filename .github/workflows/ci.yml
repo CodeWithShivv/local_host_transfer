@@ -31,15 +31,11 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y python3-tk
 
-    - name: Clean previous build artifacts on Windows
-      if: runner.os == 'Windows'
+    - name: Clean previous build artifacts
       run: |
-        Remove-Item -Recurse -Force file_transfer_project/gui/dist
-
-    - name: Clean previous build artifacts on macOS and Ubuntu
-      if: runner.os != 'Windows'
-      run: |
-        rm -rf file_transfer_project/gui/dist
+        if [ -d file_transfer_project/gui/dist ]; then
+          rm -rf file_transfer_project/gui/dist
+        fi
 
     - name: Build with PyInstaller
       run: |
@@ -52,30 +48,29 @@ jobs:
         name: ${{ matrix.os }}-build
         path: file_transfer_project/gui/dist
 
-  download:
+  verify:
     needs: build
     runs-on: ubuntu-latest
     steps:
-    - name: Download build artifact for macOS
+    - name: Download build artifacts for macOS
       uses: actions/download-artifact@v3
       with:
         name: macos-latest-build
         path: file_transfer_project/gui/dist
 
-    - name: Download build artifact for Windows
+    - name: Download build artifacts for Windows
       uses: actions/download-artifact@v3
       with:
         name: windows-latest-build
         path: file_transfer_project/gui/dist
 
-    - name: Download build artifact for Ubuntu
+    - name: Download build artifacts for Ubuntu
       uses: actions/download-artifact@v3
       with:
         name: ubuntu-latest-build
         path: file_transfer_project/gui/dist
 
     - name: Verify Windows Build
-      if: runner.os == 'ubuntu-latest'
       run: |
         if [ -f "file_transfer_project/gui/dist/file_transfer_gui.exe" ]; then
           echo "Windows build artifact found!"
