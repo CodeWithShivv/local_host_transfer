@@ -31,11 +31,17 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y python3-tk
 
-    - name: Clean previous build artifacts
+    - name: Clean previous build artifacts on Unix-like systems
+      if: runner.os != 'Windows'
       run: |
-        if [ -d file_transfer_project/gui/dist ]; then
+        if [ -d "file_transfer_project/gui/dist" ]; then
           rm -rf file_transfer_project/gui/dist
         fi
+
+    - name: Clean previous build artifacts on Windows
+      if: runner.os == 'Windows'
+      run: |
+        Remove-Item -Path file_transfer_project/gui/dist -Recurse -Force -ErrorAction SilentlyContinue
 
     - name: Build with PyInstaller
       run: |
@@ -78,3 +84,19 @@ jobs:
           echo "Windows build artifact not found!"
           exit 1
         fi
+
+  download-artifacts:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: ubuntu-latest-build
+        path: file_transfer_project/gui/dist
+
+    - name: List downloaded files
+      run: ls -al file_transfer_project/gui/dist
