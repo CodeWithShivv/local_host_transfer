@@ -25,6 +25,10 @@ jobs:
         pip install -r requirements.txt
         pip install pyinstaller
 
+    - name: Clean previous build artifacts
+      run: |
+        rm -rf file_transfer_project/gui/dist
+
     - name: Build with PyInstaller
       run: |
         cd file_transfer_project/gui
