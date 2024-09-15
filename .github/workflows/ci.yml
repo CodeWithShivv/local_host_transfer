@@ -97,7 +97,7 @@ jobs:
         git config --global user.name "github-actions"
         git config --global user.email "github-actions@github.com"
         git config --global credential.helper store
-        echo "https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com" > ~/.git-credentials
+        echo "https://x-access-token:${{ github.token}}@github.com" > ~/.git-credentials
 
     - name: Create artifact branch
       run: |
@@ -117,3 +117,4 @@ jobs:
         commit_author: 'Author <actions@github.com>'
         status_options: '--untracked-files=no'
         skip_dirty_check: true
+
