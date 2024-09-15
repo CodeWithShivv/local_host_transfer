@@ -1,4 +1,0 @@
-pyinstaller
-threading
-os
-threading
