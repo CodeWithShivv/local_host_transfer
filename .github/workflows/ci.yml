@@ -6,10 +6,10 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [macos-latest, windows-latest]
-    
+        os: [macos-latest, windows-latest, ubuntu-latest]
+
     runs-on: ${{ matrix.os }}
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -17,13 +17,19 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3'  
+        python-version: '3.x'  # Use a specific version if needed, e.g., '3.10'
 
     - name: Install dependencies
       run: |
         pip install --upgrade pip
         pip install -r requirements.txt
         pip install pyinstaller
+
+    - name: Install system dependencies on Ubuntu
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y python3-tk
 
     - name: Clean previous build artifacts
       run: |
