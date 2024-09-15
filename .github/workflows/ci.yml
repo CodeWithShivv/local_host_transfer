@@ -1,12 +1,6 @@
 name: Build with PyInstaller
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+on: [push, pull_request]
 
 jobs:
   build:
@@ -23,7 +17,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.x'  # Replace with your required Python version
+        python-version: '3'  
 
     - name: Install dependencies
       run: |
@@ -33,10 +27,11 @@ jobs:
 
     - name: Build with PyInstaller
       run: |
+        cd file_transfer_project/gui
         pyinstaller --onefile --windowed file_transfer_gui.py
 
     - name: Upload build artifact
       uses: actions/upload-artifact@v3
       with:
         name: ${{ matrix.os }}-build
-        path: dist/file_transfer_gui
+        path: file_transfer_project/gui/dist
