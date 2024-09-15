@@ -7,10 +7,12 @@ import os
 def discover_server():
     discovery_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     discovery_socket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+    discovery_socket.settimeout(5)  # Set timeout for blocking operations
     discovery_socket.bind(('', 12345))
-    
+
     discovery_socket.sendto(b"DISCOVER_SERVER", ('<broadcast>', 12345))
-    
+    print("Discovery message sent")
+
     try:
         while True:
             message, server_address = discovery_socket.recvfrom(1024)
@@ -21,7 +23,7 @@ def discover_server():
                     discovered_servers.append(server_ip)
                     update_server_list()
     except socket.timeout:
-        pass
+        print("Discovery timeout")
     finally:
         discovery_socket.close()
 
