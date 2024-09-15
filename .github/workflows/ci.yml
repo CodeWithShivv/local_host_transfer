@@ -12,7 +12,7 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [macos-latest, windows-latest]  
+        os: [macos-latest, windows-latest]
     
     runs-on: ${{ matrix.os }}
     
@@ -23,7 +23,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3'  
+        python-version: '3.x'  # Replace with your required Python version
 
     - name: Install dependencies
       run: |
@@ -33,14 +33,10 @@ jobs:
 
     - name: Build with PyInstaller
       run: |
-        if [ ${{ matrix.os }} == 'windows-latest' ]; then
-          pyinstaller --onefile --windowed file_transfer_gui.py
-        else
-          pyinstaller --onefile --windowed file_transfer_gui.py
-        fi
+        pyinstaller --onefile --windowed file_transfer_gui.py
 
     - name: Upload build artifact
       uses: actions/upload-artifact@v3
       with:
         name: ${{ matrix.os }}-build
-        path: dist/file_transfer_gui 
+        path: dist/file_transfer_gui
