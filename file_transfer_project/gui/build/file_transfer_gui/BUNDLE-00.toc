@@ -1,0 +1,3 @@
+([('file_transfer_gui',
+   '/Users/shivdvaio/local_host_transfer/file_transfer_project/gui/dist/file_transfer_gui',
+   'EXECUTABLE')],)
