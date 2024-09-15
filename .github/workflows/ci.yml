@@ -1,4 +1,4 @@
-name: Build with PyInstaller
+name: Build and Verify with PyInstaller
 
 on: [push, pull_request]
 
@@ -73,3 +73,13 @@ jobs:
       with:
         name: ubuntu-latest-build
         path: file_transfer_project/gui/dist
+
+    - name: Verify Windows Build
+      if: runner.os == 'ubuntu-latest'
+      run: |
+        if [ -f "file_transfer_project/gui/dist/file_transfer_gui.exe" ]; then
+          echo "Windows build artifact found!"
+        else
+          echo "Windows build artifact not found!"
+          exit 1
+        fi
