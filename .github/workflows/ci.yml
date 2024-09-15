@@ -1,15 +1,21 @@
-name: Build and Test
+name: Build with PyInstaller
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-
+        os: [macos-latest, windows-latest]  
+    
     runs-on: ${{ matrix.os }}
-
+    
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -17,15 +23,24 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.x'  # Replace with your required Python version
+        python-version: '3'  
 
     - name: Install dependencies
       run: |
         pip install --upgrade pip
         pip install -r requirements.txt
+        pip install pyinstaller
 
-    - name: Run application
+    - name: Build with PyInstaller
       run: |
-        python your_app.py
-      # For macOS and Ubuntu, you might need to use python3 instead of python
-      # python3 your_app.py
+        if [ ${{ matrix.os }} == 'windows-latest' ]; then
+          pyinstaller --onefile --windowed file_transfer_gui.py
+        else
+          pyinstaller --onefile --windowed file_transfer_gui.py
+        fi
+
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ matrix.os }}-build
+        path: dist/file_transfer_gui 
