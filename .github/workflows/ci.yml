@@ -31,12 +31,6 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y python3-tk
 
-    - name: Clean previous build artifacts
-      run: |
-        if [ -d file_transfer_project/gui/dist ]; then
-          rm -rf file_transfer_project/gui/dist
-        fi
-
     - name: Build with PyInstaller
       run: |
         cd file_transfer_project/gui
