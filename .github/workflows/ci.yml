@@ -45,7 +45,7 @@ jobs:
     - name: Upload build artifact
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ matrix.os }}-build
+        name: ${{ runner.os }}-build
         path: file_transfer_project/gui/dist
 
   verify:
