@@ -51,3 +51,25 @@ jobs:
       with:
         name: ${{ matrix.os }}-build
         path: file_transfer_project/gui/dist
+
+  download:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download build artifact for macOS
+      uses: actions/download-artifact@v3
+      with:
+        name: macos-latest-build
+        path: file_transfer_project/gui/dist
+
+    - name: Download build artifact for Windows
+      uses: actions/download-artifact@v3
+      with:
+        name: windows-latest-build
+        path: file_transfer_project/gui/dist
+
+    - name: Download build artifact for Ubuntu
+      uses: actions/download-artifact@v3
+      with:
+        name: ubuntu-latest-build
+        path: file_transfer_project/gui/dist
